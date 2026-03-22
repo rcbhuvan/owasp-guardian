@@ -1,0 +1,67 @@
+{
+  "name": "owasp-guardian",
+  "displayName": "owasp-guardian",
+  "description": "OWASP vulnerability scanner and auto-fixer",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.110.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rcbhuvan/owasp-guardian"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+  "commands": [
+    {
+      "command": "owasp.scan",
+      "title": "OWASP: Scan Workspace for Vulnerabilities"
+    },
+    {
+      "command": "owasp.applyFixes",
+      "title": "OWASP: Apply Queued Large Fixes"
+    },
+    {
+      "command": "owasp.report",
+      "title": "OWASP: Show Final Report"
+    },
+    { "command": "owasp.listModels", "title": "OWASP: List Available Models" }
+  ],
+  "chatParticipants": [
+    {
+      "id": "owasp.guardian",
+      "name": "owasp",
+      "description": "OWASP vulnerability scanner — scan, fix, and ask about security issues",
+      "isSticky": true,
+      "commands": [
+        { "name": "scan",    "description": "Scan the workspace for OWASP vulnerabilities" },
+        { "name": "fix",     "description": "Apply all queued fixes" },
+        { "name": "report",  "description": "Show the current security score and report" },
+        { "name": "explain", "description": "Explain a specific OWASP category or finding" }
+      ]
+    }
+  ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.110.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "typescript-eslint": "^8.56.1",
+    "eslint": "^9.39.3",
+    "typescript": "^5.9.3",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}
