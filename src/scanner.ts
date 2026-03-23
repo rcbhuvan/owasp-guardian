@@ -41,9 +41,9 @@ export async function scanWorkspace(
 
   // Call VS Code LM API
   const [model] = await vscode.lm.selectChatModels({
-  vendor: 'copilot',
-  family: 'gpt-4o-mini'
-});
+    vendor: 'copilot',
+    family: 'gpt-4o-mini'
+  });
 
   if (!model) {
     vscode.window.showErrorMessage('No Copilot LM model available. Check your Copilot login.');
@@ -95,6 +95,8 @@ function collectFiles(dir: string, results: string[] = []): string[] {
     if (stat.isDirectory()) {
       collectFiles(full, results);
     } else if (SUPPORTED_EXTENSIONS.includes(path.extname(entry))) {
+      // Exclude test files (*.test.*, *.spec.*)
+      if (/\.(test|spec)\./i.test(entry)) continue;
       results.push(full);
     }
   }

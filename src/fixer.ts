@@ -40,19 +40,48 @@ export async function applyQueuedFixes(context: vscode.ExtensionContext) {
     return;
   }
 
+  const fixed: any[] = [];
+  const unresolved: any[] = [];
+
   for (const finding of queue) {
     const confirm = await vscode.window.showWarningMessage(
       `Apply fix for ${finding.file}:${finding.line}?\n${finding.description}`,
       'Apply', 'Skip'
     );
     if (confirm === 'Apply') {
-      await applyAutoFix(finding, workspacePath);
-      logToChangelog(workspacePath, `[APPLIED] ${finding.file}:${finding.line} | ${finding.owasp_category}`);
+      const success = await applyAutoFix(finding, workspacePath);
+      if (success) {
+        fixed.push(finding);
+        logToChangelog(workspacePath, `[APPLIED] ${finding.file}:${finding.line} | ${finding.owasp_category}`);
+      } else {
+        // Downgrade to review_required on failure
+        finding.fix_type = 'review_required';
+        unresolved.push(finding);
+        logToChangelog(workspacePath, `[FIX FAILED → REVIEW REQUIRED] ${finding.file}:${finding.line} | ${finding.owasp_category}`);
+      }
     } else {
+      unresolved.push(finding);
       logToChangelog(workspacePath, `[SKIPPED] ${finding.file}:${finding.line} | ${finding.owasp_category}`);
     }
   }
 
-  context.globalState.update('owasp.fixQueue', []);
-  vscode.window.showInformationMessage('Queued fixes processed. Run owasp.report to see score.');
+  // Log structured report
+  if (fixed.length > 0) {
+    logToChangelog(workspacePath, `Fixed:`);
+    for (const f of fixed) {
+      logToChangelog(workspacePath, `  - ${f.file}:${f.line} [${f.owasp_category}] ${f.description}`);
+    }
+  }
+  if (unresolved.length > 0) {
+    logToChangelog(workspacePath, `Unresolved (downgraded to review_required):`);
+    for (const f of unresolved) {
+      logToChangelog(workspacePath, `  - ${f.file}:${f.line} [${f.owasp_category}] ${f.description}`);
+    }
+  }
+
+  // Keep only unresolved items in the queue
+  context.globalState.update('owasp.fixQueue', unresolved);
+  vscode.window.showInformationMessage(
+    `Fixes applied: ${fixed.length} | Unresolved: ${unresolved.length}. Run owasp.report to see score.`
+  );
 }

@@ -15,8 +15,14 @@ export async function triageResults(
 
     if (finding.fix_type === 'auto_fix' && allowAutoFix) {
       const success = await applyAutoFix(finding, workspacePath);
-      const status = success ? 'AUTO-FIXED' : 'AUTO-FIX FAILED';
-      logToChangelog(workspacePath, `${tag} → ${status} | ${finding.description}`);
+      if (success) {
+        logToChangelog(workspacePath, `${tag} → AUTO-FIXED | ${finding.description}`);
+      } else {
+        // Downgrade to review_required on failure
+        finding.fix_type = 'review_required';
+        queued.push(finding);
+        logToChangelog(workspacePath, `${tag} → AUTO-FIX FAILED → QUEUED (review required) | ${finding.description}`);
+      }
     } else {
       // Large change or user said no auto-fix — queue it
       queued.push(finding);

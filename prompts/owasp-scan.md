@@ -19,6 +19,17 @@ Rules:
   - "review_required" → structural, may affect functionality (e.g. redesign auth, refactor queries)
 - Return ONLY a valid JSON array. No explanation, no markdown.
 
+Classification criteria:
+- Classify as "auto_fix" if ALL of these are true:
+  - The fix is a single-line or small localised change
+  - It does not touch authentication, session management, or cryptographic logic
+  - It does not alter application architecture or control flow
+- Classify as "review_required" if ANY of these are true:
+  - The fix requires changes across multiple files
+  - It involves authentication, authorisation, session tokens, or password handling
+  - It requires understanding of business logic or data flow
+  - It touches cryptographic algorithms or key management
+
 Output schema (strict JSON):
 [
   {

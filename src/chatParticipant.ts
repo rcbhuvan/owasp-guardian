@@ -42,8 +42,8 @@ export function registerChatParticipant(context: vscode.ExtensionContext) {
           stream.markdown(`## 🛡️ OWASP Security Report\n`);
           stream.markdown(`| Metric | Value |\n|---|---|\n`);
           stream.markdown(`| Total issues found | ${total} |\n`);
-          stream.markdown(`| Issues resolved | ${fixed} |\n`);
-          stream.markdown(`| Issues remaining | ${remaining.length} |\n`);
+          stream.markdown(`| Issues auto-fixed | ${fixed} |\n`);
+          stream.markdown(`| Issues pending | ${remaining.length} |\n`);
           stream.markdown(`| **Security score** | **${score}%** |\n\n`);
 
           if (remaining.length > 0) {
@@ -91,9 +91,9 @@ export function registerChatParticipant(context: vscode.ExtensionContext) {
           const userPrompt = request.prompt;
 
           const [model] = await vscode.lm.selectChatModels({
-  vendor: 'copilot',
-  family: 'gpt-4o-mini'
-});
+            vendor: 'copilot',
+            family: 'gpt-4o-mini'
+          });
 
           if (!model) {
             stream.markdown('❌ No Copilot model available.');
@@ -102,7 +102,7 @@ export function registerChatParticipant(context: vscode.ExtensionContext) {
 
           const context_summary = findings.length > 0
             ? `Last scan found ${findings.length} issues:\n` +
-              findings.map(f => `- ${f.file}:${f.line} [${f.owasp_category}] ${f.description}`).join('\n')
+            findings.map(f => `- ${f.file}:${f.line} [${f.owasp_category}] ${f.description}`).join('\n')
             : 'No scan has been run yet.';
 
           const messages = [

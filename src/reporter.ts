@@ -13,12 +13,12 @@ export async function generateReport(context: vscode.ExtensionContext) {
   const report = [
     `========== OWASP GUARDIAN REPORT ==========`,
     `Total issues found  : ${total}`,
-    `Issues resolved     : ${fixed}`,
-    `Issues remaining    : ${remaining.length}`,
+    `Issues auto-fixed   : ${fixed}`,
+    `Issues pending      : ${remaining.length}`,
     `Security score      : ${score}%`,
-    `===========================================`,
+    `============================================`,
     remaining.length > 0 ? `\nPending issues:` : '',
-    ...remaining.map(f => `  - ${f.file}:${f.line} [${f.owasp_category}] ${f.description}`)
+    ...remaining.map(f => `- ${f.file}:${f.line}  [${f.owasp_category}] ${f.description}`)
   ].join('\n');
 
   logToChangelog(workspacePath, `\n${report}\n`);
