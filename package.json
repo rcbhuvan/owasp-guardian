@@ -1,14 +1,14 @@
 {
-  "name": "owasp-guardian",
-  "displayName": "owasp-guardian",
-  "description": "OWASP vulnerability scanner and auto-fixer",
+  "name": "owasp-guardian-advanced",
+  "displayName": "OWASP Guardian Advanced",
+  "description": "AI-powered OWASP multi-agent pipeline with specialist sub-agents powered by GitHub Copilot",
   "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.110.0"
-  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/rcbhuvan/owasp-guardian"
+    "url": "https://github.com/rcbhuvan/owasp-guardian-advanced"
+  },
+  "engines": {
+    "vscode": "^1.110.0"
   },
   "categories": [
     "Other"

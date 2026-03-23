@@ -1,6 +1,21 @@
 # OWASP Guardian
 
 AI-powered OWASP Top 10 vulnerability scanner for VS Code, powered by GitHub Copilot.
+# OWASP Guardian Advanced
+
+AI-powered OWASP Top 10 multi-agent pipeline for VS Code, powered by GitHub Copilot.
+
+> **Advanced version** — uses a multi-agent architecture with specialist sub-agents.
+> Looking for the simpler version? Install [OWASP Guardian](https://github.com/rcbhuvan/owasp-guardian).
+
+## Agent Pipeline
+```
+owasp-guardian (orchestrator)
+├── owasp-scanner    → scans all files, returns findings
+├── owasp-fixer      → applies auto-fixes with comment blocks
+├── owasp-reviewer   → documents large changes as todos
+└── owasp-reporter   → writes changelog.log + security score
+```
 
 ## Features
 
